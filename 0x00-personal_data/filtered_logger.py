@@ -40,3 +40,33 @@ class RedactingFormatter(logging.Formatter):
         msg = super().format(record)
         msg = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
         return msg
+
+
+def get_logger() -> logging.Logger:
+    """
+    returns a logging.Logger object
+    """
+
+    # create a logger instance
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+
+    # create a console handler and set level
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    # create instance of RedactingFormatter with desired fields
+    red_formatter = RedactingFormatter(fields=["name",
+                                               "email",
+                                               "ssn", "password", "ip"])
+
+    # set RedactingFormatter as formatter for the console handler
+    console_handler.setFormatter(red_formatter)
+
+    # add the console handler to the logger
+    logger.addHandler(console_handler)
+
+    return logger
+
+
+PII_FIELDS = ("name", "email", "ssn", "password", "ip")
