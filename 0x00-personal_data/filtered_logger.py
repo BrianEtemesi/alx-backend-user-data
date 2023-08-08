@@ -66,6 +66,9 @@ def get_logger() -> logging.Logger:
     # add the console handler to the logger
     logger.addHandler(console_handler)
 
+    # disable message propagation to parent loggers
+    logger.propagate = False
+
     return logger
 
 
