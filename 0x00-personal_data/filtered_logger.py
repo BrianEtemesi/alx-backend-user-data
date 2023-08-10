@@ -5,6 +5,8 @@ implementation of a log filter
 import re
 from typing import List
 import logging
+import mysql.connector
+import os
 
 
 def filter_datum(fields: List[str],
@@ -70,6 +72,25 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    returns a connector to a mysql database
+    """
+    config = {
+        "user": os.environ.get("PERSONAL_DATA_DB_USERNAME"),
+        "password": os.environ.get("PERSONAL_DATA_DB_PASSWORD"),
+        "host": os.environ.get("PERSONAL_DATA_DB_HOST"),
+        "database": os.environ.get("PERSONAL_DATA_DB_NAME")
+    }
+
+    try:
+        connection = mysql.connector.connect(**config)
+        return connection
+    except mysql.connector.Error as err:
+        print("Error: {}".format(err))
+        return None
 
 
 PII_FIELDS = ("name", "email", "ssn", "password", "phone")
