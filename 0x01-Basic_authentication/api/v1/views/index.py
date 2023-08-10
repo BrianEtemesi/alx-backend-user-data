@@ -27,7 +27,7 @@ def stats() -> str:
 
 
 @app_views.route('/unauthorized', methods=['GET'])
-def custom_abort() -> None:
+def unauthorized() -> None:
     """
     GET /api/v1/unauthorized
     - abort with 401 error
