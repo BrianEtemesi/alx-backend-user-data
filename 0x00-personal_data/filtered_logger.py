@@ -85,12 +85,8 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         "database": os.getenv("PERSONAL_DATA_DB_NAME")
     }
 
-    try:
-        connection = mysql.connector.connect(**config)
-        return connection
-    except mysql.connector.Error as err:
-        print("Error: {}".format(err))
-        return None
+    connection = mysql.connector.connect(**config)
+    return connection
 
 
 PII_FIELDS = ("name", "email", "ssn", "password", "phone")
