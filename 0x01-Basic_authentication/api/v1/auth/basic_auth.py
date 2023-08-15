@@ -81,9 +81,7 @@ class BasicAuth(Auth):
         except Exception:
             return None
 
-        if len(results) == 0:
-            return None
-        else:
+        if len(results) > 0:
             user_obj = results[0]
 
             # validate password of found user object
