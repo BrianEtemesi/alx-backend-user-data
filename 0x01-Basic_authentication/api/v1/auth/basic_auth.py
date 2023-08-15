@@ -71,10 +71,6 @@ class BasicAuth(Auth):
         if user_pwd is None or type(user_pwd) != str:
             return None
 
-        # check the count of User instances
-        if User.count() == 0:
-            return None
-
         # search for object with matching email
         try:
             results = User.search(attributes={"email": user_email})
