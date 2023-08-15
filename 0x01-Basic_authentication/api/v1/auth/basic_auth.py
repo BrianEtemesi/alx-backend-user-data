@@ -5,6 +5,8 @@ implementation of a basic authentication class
 from api.v1.auth.auth import Auth
 import base64
 import binascii
+from models.user import User
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -58,3 +60,30 @@ class BasicAuth(Auth):
 
         credentials = decoded_base64_authorization_header.split(":")
         return credentials[0], credentials[1]
+
+    def user_object_from_credentials(self, user_email: str,
+                                     user_pwd: str) -> TypeVar('User'):
+        """
+        returns a Userr instance based on their email and password
+        """
+        if user_email is None or type(user_email) != str:
+            return None
+        if user_pwd is None or type(user_pwd) != str:
+            return None
+
+        # check the count of User instances
+        if User.count() == 0:
+            return None
+
+        # search for object with matching email
+        results = User.search(attributes={"email": user_email})
+        if len(results) == 0:
+            return None
+        else:
+            user_obj = results[0]
+
+            # validate password of found user object
+            if user_obj.is_valid_password(user_pwd):
+                return user_obj
+            else:
+                return None
