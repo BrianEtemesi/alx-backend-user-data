@@ -76,7 +76,11 @@ class BasicAuth(Auth):
             return None
 
         # search for object with matching email
-        results = User.search(attributes={"email": user_email})
+        try:
+            results = User.search(attributes={"email": user_email})
+        except Exception:
+            return None
+
         if len(results) == 0:
             return None
         else:
