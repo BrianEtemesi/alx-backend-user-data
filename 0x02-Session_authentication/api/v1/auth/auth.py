@@ -4,6 +4,7 @@ implementation of a class to manage authentication
 """
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
@@ -57,4 +58,5 @@ class Auth:
         if request is None:
             return None
 
-        return request.cookies.get("_my_session_id")
+        _my_session_id = os.getenv('SESSION_NAME')
+        return request.cookies.get(_my_session_id)
