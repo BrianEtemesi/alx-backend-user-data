@@ -39,13 +39,14 @@ def before_request():
     if auth:
         request.current_user = auth.current_user(request)
         if auth.require_auth(request.path, excluded_auth):
-            if auth.authorization_header(request) is None:
+
+            auth_header = auth.authorization_header(request)
+            auth_session = auth.session_cookie(request)
+            if auth_header is None and auth_session is None:
                 abort(401)
+
             if auth.current_user(request) is None:
                 abort(403)
-            req = request  # short variable to manage length of the next line
-            if auth.authorization_header(req) and auth.session_cookie(req):
-                abort(401)
 
 
 @app.errorhandler(404)
