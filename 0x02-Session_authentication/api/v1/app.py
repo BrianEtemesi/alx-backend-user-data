@@ -33,6 +33,7 @@ def before_request():
     handle before request
     """
     if auth:
+        request.current_user = auth.current_user(request)
         if auth.require_auth(request.path, excluded_auth):
             if auth.authorization_header(request) is None:
                 abort(401)
