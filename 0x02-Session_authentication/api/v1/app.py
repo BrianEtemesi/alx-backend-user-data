@@ -27,7 +27,8 @@ if auth_type == 'session_auth':
 
 excluded_auth = ['/api/v1/status/',
                  '/api/v1/unauthorized/',
-                 '/api/v1/forbidden/']
+                 '/api/v1/forbidden/',
+                 '/api/v1/auth_session/login/']
 
 
 @app.before_request
@@ -42,6 +43,9 @@ def before_request():
                 abort(401)
             if auth.current_user(request) is None:
                 abort(403)
+            req = request  # short variable to manage length of the next line
+            if auth.authorization_header(req) and auth.session_cookie(req):
+                abort(401)
 
 
 @app.errorhandler(404)
