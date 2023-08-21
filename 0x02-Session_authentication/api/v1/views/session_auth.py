@@ -46,3 +46,20 @@ def authenicate_session() -> None:
             return jsonify({"error": "wrong password"}), 401
     else:
         return jsonify({"error": "no user found for this email"}), 404
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def logout_session() -> None:
+    """
+    handles logout from session
+    """
+    from api.v1.app import auth
+
+    # delete session id
+    del_status = auth.destroy_session(request)
+
+    if del_status:
+        return jsonify({}), 200
+    else:
+        abort(404)
