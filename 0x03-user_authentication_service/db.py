@@ -6,8 +6,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
+
+# apparently is it not tracking my cdinguhkhbjhvjvsckhdbwkbbkjbkbk
 
 
 class DB:
@@ -40,3 +44,20 @@ class DB:
         self._session.commit()
 
         return new_user
+
+    def find_user_by(self, **kwargs):
+        """
+        finds user by given parameters
+        """
+
+        query = self._session.query(User)
+        try:
+            for key, value in kwargs.items():
+                user = query.filter(getattr(User, key) == value).first()
+
+            if user is None:
+                raise NoResultFound
+        except AttributeError:
+            raise InvalidRequestError
+
+        return user
