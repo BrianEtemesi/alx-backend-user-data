@@ -46,7 +46,7 @@ class DB:
 
         return new_user
 
-    def find_user_by(self, **kwargs) -> Optional[User]:
+    def find_user_by(self, **kwargs) -> User:
         """
         finds user by given parameters
         """
