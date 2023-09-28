@@ -66,14 +66,17 @@ def logout():
     # retrieve session id from request cookie
     session_id = request.cookies.get('session_id')
 
+    if session_id is None:
+        abort(403)
+
     # find user with retrieved session id
     user = AUTH.get_user_from_session_id(session_id)
 
-    if user is not None:
+    if user:
         AUTH.destroy_session(user.id)
         return redirect(url_for('payload'))
     else:
-        return 403
+        abort(403)
 
 
 if __name__ == "__main__":
