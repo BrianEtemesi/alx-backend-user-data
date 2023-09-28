@@ -132,7 +132,7 @@ def update_password():
         abort(403)
 
     try:
-        AUTH.reset_password(reset_token, password)
+        AUTH.update_password(reset_token, password)
         response_data = {"email": email, "message": "Password updated"}
         response = make_response(jsonify(response_data))
         return response, 200
