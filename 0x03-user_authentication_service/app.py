@@ -128,10 +128,14 @@ def update_password():
     reset_token = request.form.get('reset_token')
     password = request.form.get('password')
 
+    if email is None or reset_token is None or password is None:
+        abort(403)
+
     try:
         AUTH.reset_password(reset_token, password)
         response_data = {"email": email, "message": "Password updated"}
-        return jsonify(response_data)
+        response = make_response(jsonify(response_data))
+        return response, 200
     except ValueError:
         abort(403)
 
