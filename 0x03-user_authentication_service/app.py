@@ -69,7 +69,7 @@ def logout():
     # find user with retrieved session id
     user = AUTH.get_user_from_session_id(session_id)
 
-    if user:
+    if user is not None:
         AUTH.destroy_session(user.id)
         return redirect(url_for('payload'))
     else:
