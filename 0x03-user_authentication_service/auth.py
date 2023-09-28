@@ -111,15 +111,13 @@ class Auth:
         generates a reset password token for user
         """
         # get user by email
-        user = self._db.find_user_by(email=email)
-
-        # if user is found, generate token
-        if user:
+        try:
+            user = self._db.find_user_by(email=email)
             token = _generate_uuid()
 
             # update user's reset token
             self._db.update_user(user.id, reset_token=token)
-
             return token
-        else:
+
+        except NoResultFound:
             raise ValueError
