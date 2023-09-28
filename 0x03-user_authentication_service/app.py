@@ -3,7 +3,8 @@
 flask application
 """
 
-from flask import Flask, jsonify, request, make_response, abort
+from flask import (Flask, jsonify, request, make_response,
+                   abort, redirect, url_for)
 from auth import Auth
 
 app = Flask(__name__)
@@ -55,6 +56,24 @@ def login():
         return response
     else:
         abort(401)
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """
+    logs out user by destroying user session
+    """
+    # retrieve session id from request cookie
+    session_id = request.cookies.get('session_id')
+
+    # find user with retrieved session id
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect(url_for('payload'))
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
