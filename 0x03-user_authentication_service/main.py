@@ -11,8 +11,10 @@ PASSWD = "b4l0u"
 NEW_PASSWD = "t4rt1fl3tt3"
 BASE_URL = "http://0.0.0.0:5000"
 
+
 def register_user(email: str, password: str) -> None:
-    """Tests registering a user.
+    """
+    test suites registering a user.
     """
     url = "{}/users".format(BASE_URL)
     body = {
@@ -26,8 +28,10 @@ def register_user(email: str, password: str) -> None:
     assert res.status_code == 400
     assert res.json() == {"message": "email already registered"}
 
+
 def log_in_wrong_password(email: str, password: str) -> None:
-    """Tests logging in with a wrong password.
+    """
+    test suites logging in with a wrong password.
     """
     url = "{}/sessions".format(BASE_URL)
     body = {
@@ -37,8 +41,10 @@ def log_in_wrong_password(email: str, password: str) -> None:
     res = requests.post(url, data=body)
     assert res.status_code == 401
 
+
 def log_in(email: str, password: str) -> str:
-    """Tests logging in.
+    """
+    test suites logging in.
     """
     url = "{}/sessions".format(BASE_URL)
     body = {
@@ -50,15 +56,19 @@ def log_in(email: str, password: str) -> str:
     assert res.json() == {"email": email, "message": "logged in"}
     return res.cookies.get('session_id')
 
+
 def profile_unlogged() -> None:
-    """Tests retrieving profile information whilst logged out.
+    """
+    test suites retrieving profile information whilst logged out.
     """
     url = "{}/profile".format(BASE_URL)
     res = requests.get(url)
     assert res.status_code == 403
 
+
 def profile_logged(session_id: str) -> None:
-    """Tests retrieving profile information whilst logged in.
+    """
+    test suites retrieving profile information whilst logged in.
     """
     url = "{}/profile".format(BASE_URL)
     req_cookies = {
@@ -68,8 +78,10 @@ def profile_logged(session_id: str) -> None:
     assert res.status_code == 200
     assert "email" in res.json()
 
+
 def log_out(session_id: str) -> None:
-    """Tests logging out of a session.
+    """
+    test suites logging out of a session.
     """
     url = "{}/sessions".format(BASE_URL)
     req_cookies = {
@@ -79,8 +91,10 @@ def log_out(session_id: str) -> None:
     assert res.status_code == 200
     assert res.json() == {"message": "Bienvenue"}
 
+
 def reset_password_token(email: str) -> str:
-    """Tests requesting a password reset.
+    """
+    test suites requesting a password reset.
     """
     url = "{}/reset_password".format(BASE_URL)
     body = {'email': email}
@@ -91,9 +105,10 @@ def reset_password_token(email: str) -> str:
     assert "reset_token" in res.json()
     return res.json().get('reset_token')
 
+
 def update_password(email: str, reset_token: str, new_password: str) -> None:
     """
-    Tests updating a user's password.
+    test suites updating a user's password.
     """
     url = "{}/reset_password".format(BASE_URL)
     body = {
@@ -105,8 +120,9 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
     assert res.status_code == 200
     assert res.json() == {"email": email, "message": "Password updated"}
 
+
 if __name__ == "__main__":
-    # Testing workflow
+    # test  workflow
     register_user(EMAIL, PASSWD)
     log_in_wrong_password(EMAIL, NEW_PASSWD)
     profile_unlogged()
